@@ -56,25 +56,15 @@ const App: React.FC = () => {
 
   
   const toggleSelectAll = () => {
-    if (selectAllChecked) {
-     
-      setSelectedIds((prev) =>
-        prev.filter((id) => !artworks.map((artwork) => artwork.id).includes(id))
-      );
-    } else {
-      
-      setSelectedIds((prev) => [
-        ...prev,
-        ...artworks.map((artwork) => artwork.id),
-      ]);
-    }
     setSelectAllChecked(!selectAllChecked);
   };
 
  
   const toggleCheckbox = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    setSelectedIds((prevSelectedIds) =>
+      prevSelectedIds.includes(id)
+        ? prevSelectedIds.filter((selectedId) => selectedId !== id)
+        : [...prevSelectedIds, id]
     );
   };
 
@@ -131,7 +121,7 @@ const handleInputSubmit = async () => {
 
 
   return (
-    <div className="p-4">
+    <div className="p-20">
       
       <DataTable value={artworks} loading={loading}>
        
@@ -148,10 +138,9 @@ const handleInputSubmit = async () => {
 
               
               <Button
-                icon="pi pi-angle-down"
-                className=" p-button-text p-button-sm m-0"
+                icon={inputVisible ? "pi pi-angle-up" : "pi pi-angle-down"}
+                className="p-button-text p-button-sm m-0"
                 onClick={() => setInputVisible(!inputVisible)}
-                style={{ visibility: inputVisible ? 'hidden' : 'visible' }}
               />
               {inputVisible && (
                 <div className="flex flex-col gap-2 border-2 p-shadow-3 p-mt-2 p-p-2">
@@ -168,7 +157,7 @@ const handleInputSubmit = async () => {
                   <div>
                     <Button
                       label="Submit"
-                      className=" p-button-sm"
+                      className="p-button-primary p-button-sm"
                       onClick={handleInputSubmit}
                     />
                   </div>
@@ -189,7 +178,7 @@ const handleInputSubmit = async () => {
         />
       
         <Column field="title" header="Name" />
-        <Column field="artist_display" header="Category" />
+        <Column field="category_titles" header="Category" />
       </DataTable>
 
      
